@@ -3,7 +3,6 @@
 // Components
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
-import { ModeToggle } from "@/components/modeToggle/modeToggle";
 import { Button } from "@/components/ui/button";
 
 // Icons
@@ -19,7 +18,6 @@ const Index = () => {
             <h2 className="text-xl font-semibold tracking-wide">ADRDE</h2>
           </div>
           <div className="flex items-center justify-center gap-4">
-            <ModeToggle />
             <Button className="flex cursor-pointer items-center gap-2 bg-red-500 hover:scale-105 hover:bg-red-600 active:scale-95">
               <span className="flex items-center gap-1 font-semibold">
                 Logout <LogOut />

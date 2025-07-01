@@ -20,7 +20,7 @@ const layout = ({
         <NavigationSidebar isAdmin />
         <main className="h-screen w-full overflow-x-hidden">
           <Header />
-          {children}
+          <div className="min-h-[calc(100%-8.2rem)]">{children}</div>
           <Footer />
         </main>
       </SidebarProvider>

@@ -11,40 +11,28 @@ import {
   UserPlus,
 } from "lucide-react";
 
-// Navigation items for the User sidebar
-export const AdminNavigationItems = [
+// Navigation items for the sidebar
+export const NavigationItems = [
   {
     title: "Home",
-    url: "/admin/home",
+    url: "/home",
     icon: Home,
   },
   {
-    title: "Add IT Personal",
-    url: "/admin/add-it-personal",
+    title: "Add User",
+    url: "/add-user",
     icon: UserPlus,
   },
   {
-    title: "Manage PCs",
-    url: "/admin/manage-pcs",
+    title: "Manage Devices",
+    url: "/manage-devices",
     icon: Edit,
   },
   {
-    title: "Pending Complaints",
-    url: "/admin/pending-complaint",
-    icon: CloudLightning,
-  },
-  {
     title: "Settings",
-    url: "/admin/settings",
+    url: "/settings",
     icon: Settings,
   },
-];
-
-// Home Navigation Item
-export const HomeNavigationItem = [
-  { title: "All PCs", icon: Laptop },
-  { title: "Manage User", icon: UserPlus },
-  { title: "Add IT Personal", icon: PlusSquare },
 ];
 
 // const chooseColor = (status) => {
