@@ -27,12 +27,7 @@ import { cn } from "@/lib/utils";
 // Constants
 import { NavigationItems } from "@/lib/constant";
 
-// Type
-type NavigationItem = {
-  isAdmin: boolean;
-};
-
-export default function Index(isAdmin: NavigationItem) {
+export function NavigationSidebar() {
   // Get the current pathname
   const pathname = usePathname();
 

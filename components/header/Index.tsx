@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 // Icons
 import { LogOut } from "lucide-react";
 
-const Index = () => {
+export const Header = () => {
   return (
     <>
       <div className="sticky top-0 z-50 bg-white dark:bg-[#1c1917]">
@@ -31,5 +31,3 @@ const Index = () => {
     </>
   );
 };
-
-export default Index;

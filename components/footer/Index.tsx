@@ -3,7 +3,7 @@
 // Utility
 import Link from "next/link";
 
-const Index = () => {
+export const Footer = () => {
   return (
     <>
       <footer className="w-full border-t border-gray-300 bg-gray-100 text-gray-600 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300">
@@ -29,5 +29,3 @@ const Index = () => {
     </>
   );
 };
-
-export default Index;

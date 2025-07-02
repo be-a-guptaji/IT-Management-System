@@ -2,9 +2,9 @@
 
 // Components
 import { SidebarProvider } from "@/components/ui/sidebar";
-import NavigationSidebar from "@/components/navigation/Index";
-import Header from "@/components/header/Index";
-import Footer from "@/components/footer/Index";
+import { NavigationSidebar } from "@/components/navigation/Index";
+import { Header } from "@/components/header/Index";
+import { Footer } from "@/components/footer/Index";
 
 // Types
 import { ReactNode } from "react";
@@ -17,10 +17,10 @@ const layout = ({
   return (
     <>
       <SidebarProvider>
-        <NavigationSidebar isAdmin />
-        <main className="h-screen w-full overflow-x-hidden">
+        <NavigationSidebar />
+        <main className="h-screen w-full overflow-x-hidden bg-black/[0.07]">
           <Header />
-          <div className="min-h-[calc(100%-8.2rem)]">{children}</div>
+          {children}
           <Footer />
         </main>
       </SidebarProvider>
