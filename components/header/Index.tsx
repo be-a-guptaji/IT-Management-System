@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button";
 // Icons
 import { LogOut } from "lucide-react";
 
+// Utility
+import Link from "next/link";
+
 export const Header = () => {
   return (
     <>
@@ -15,7 +18,12 @@ export const Header = () => {
         <header className="z-10 flex h-14 w-full items-center justify-between px-4 shadow-md backdrop-blur-sm dark:bg-[#1c1917]">
           <div className="flex items-center justify-center gap-6">
             <SidebarTrigger className="cursor-pointer" />
-            <h2 className="text-xl font-semibold tracking-wide">ADRDE</h2>
+            <Link
+              href="/home"
+              className="cursor-default text-xl font-semibold tracking-wide"
+            >
+              ADRDE
+            </Link>
           </div>
           <div className="flex items-center justify-center gap-4">
             <Button className="flex cursor-pointer items-center gap-2 bg-red-500 hover:scale-105 hover:bg-red-600 active:scale-95">
