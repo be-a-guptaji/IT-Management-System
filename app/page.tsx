@@ -1,20 +1,9 @@
 // @app/page.tsx
 
-"use client";
-
-// Components
-import { LoginForm } from "@/components/form/LoginForm";
-import { SignUpForm } from "@/components/form/SignUpForm";
-import { Button } from "@/components/ui/button";
-
-// Utility
-import { cn } from "@/lib/utils";
-
-// React
-import { useState } from "react";
+import { redirect } from "next/navigation";
 
 export default function page() {
-  const [isLogin, setIsLogin] = useState(true);
+  redirect("/home");
 
   return (
     <>

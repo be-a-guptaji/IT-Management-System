@@ -3,11 +3,9 @@
 const page = () => {
   return (
     <>
-          <div>
-              Add user
-      </div>
+      <div>Add user</div>
     </>
-  )
-}
+  );
+};
 
-export default page
+export default page;

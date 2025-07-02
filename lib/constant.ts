@@ -24,8 +24,8 @@ export const NavigationItems = [
     icon: UserPlus,
   },
   {
-    title: "Manage Devices",
-    url: "/manage-devices",
+    title: "Manage User",
+    url: "/manage-user",
     icon: Edit,
   },
   {
