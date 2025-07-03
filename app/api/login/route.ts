@@ -8,6 +8,7 @@ import { connectToDatabase } from "@/lib/db";
 
 // Models
 import { Admin } from "@/lib/models/Admin.model";
+import { BanToken } from "@/lib/models/BanToken.model";
 
 // Environment
 import { envServer } from "@/lib/env/env.server";
@@ -82,6 +83,18 @@ export async function GET(req: NextRequest) {
     if (!oldToken) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
+
+    // Check if token is already banned
+    const bannedToken = await BanToken.findOne({ token: oldToken });
+    console.log(bannedToken);
+
+    // If token is banned, return error`
+    if (bannedToken) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    // Ban the token
+    await BanToken.create({ token: oldToken });
 
     // Verify token
     const verify = jwt.verify(oldToken, envServer.JWT_SECRET) as JwtPayload;

@@ -24,17 +24,22 @@ export interface IAdmin extends Document {
 }
 
 // Define schema
-const AdminSchema: Schema<IAdmin> = new Schema<IAdmin>({
-  userName: {
-    type: String,
-    required: true,
-    unique: true,
+const AdminSchema: Schema<IAdmin> = new Schema<IAdmin>(
+  {
+    userName: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 // Method: Set and hash password
 AdminSchema.methods.setPassword = async function (
