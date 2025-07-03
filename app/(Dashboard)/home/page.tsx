@@ -1,13 +1,26 @@
 // @app/(Dashboard)/home/page.tsx
 
+"use client";
+
 // Components
 import { Input } from "@/components/ui/input";
 import UserBox from "@/components/ui/UserBox";
+import Loading from "@/components/ui/loading";
+
+// Hooks
+import { useAuth } from "@/hooks/useAuth";
 
 // Icons
 import { Search } from "lucide-react";
 
 const page = () => {
+  const { loading } = useAuth();
+
+  // If loading, show loading message
+  if (loading) {
+    return <Loading />;
+  }
+
   return (
     <>
       <div className="flex min-h-full flex-wrap items-center justify-center gap-12 p-16">
@@ -27,4 +40,3 @@ const page = () => {
 };
 
 export default page;
-

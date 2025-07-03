@@ -86,7 +86,6 @@ export async function GET(req: NextRequest) {
 
     // Check if token is already banned
     const bannedToken = await BanToken.findOne({ token: oldToken });
-    console.log(bannedToken);
 
     // If token is banned, return error`
     if (bannedToken) {
