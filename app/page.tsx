@@ -30,7 +30,7 @@ import api from "@/lib/axios/axios.client";
 import { useRouter } from "next/navigation";
 
 // React
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Icons
 import { Building2 } from "lucide-react";
@@ -84,6 +84,30 @@ export default function Page() {
       form.reset();
     }
   };
+
+  // useEffect
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkLogin = async () => {
+      try {
+        // Make a request to check if the user is already logged in
+        const res = await api.get("/login");
+
+        // If the user is already logged in, redirect to the home page
+        if (res.status === 200) {
+          router.push("/home");
+        }
+      } catch {
+        // Handle error silently
+      } finally {
+        // Reset the form
+        form.reset();
+      }
+    };
+
+    // Call the checkLogin function
+    checkLogin();
+  }, [form, router]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
