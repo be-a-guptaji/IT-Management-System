@@ -1,10 +1,20 @@
 // @app/api/login/route.ts
 
 // Response
-import { connectToDatabase } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+// Database
+import { connectToDatabase } from "@/lib/db";
+
+// Models
+import { Admin } from "@/lib/models/Admin.model";
+
+export async function POST() {
   await connectToDatabase();
+
+  const admin = new Admin({ userName: "admin" });
+  await admin.setPassword("admin");
+  await admin.save();
+
   return new NextResponse("Login route called");
 }

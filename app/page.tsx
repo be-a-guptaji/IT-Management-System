@@ -29,6 +29,7 @@ import { Building2 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import api from "@/lib/axios/axios.client";
 
 const loginFormSchema = z.object({
   userName: z.string().min(1),
@@ -46,7 +47,7 @@ export default function Page() {
 
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     // Reset the form after submission
-    console.log(data);
+    api.post("/login");
     form.reset();
   };
 
