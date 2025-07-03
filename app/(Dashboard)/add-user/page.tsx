@@ -25,7 +25,6 @@ const formSchema = z.object({
   middelName: z.string().min(1),
   lastName: z.string().min(1),
   designation: z.string().min(1),
-  macAddress: z.string().min(1),
   para: z.coerce.number(),
 });
 
@@ -38,7 +37,6 @@ const Page = () => {
       middelName: "",
       lastName: "",
       designation: "",
-      macAddress: "",
       para: 0,
     },
   });
@@ -104,20 +102,6 @@ const Page = () => {
                   <FormLabel>Designation</FormLabel>
                   <FormControl>
                     <Input placeholder="Designation" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="macAddress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>MAC Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="00:1A:2B:3C:4D:5E" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
