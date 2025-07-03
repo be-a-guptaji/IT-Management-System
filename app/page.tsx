@@ -22,21 +22,34 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-// Icons
-import { Building2 } from "lucide-react";
-
 // Utility
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import api from "@/lib/axios/axios.client";
+import { useRouter } from "next/navigation";
 
+// React
+import { useState } from "react";
+
+// Icons
+import { Building2 } from "lucide-react";
+
+// Login Form Schema
 const loginFormSchema = z.object({
   userName: z.string().min(1),
   password: z.string().min(1),
 });
 
 export default function Page() {
+  // Router
+  const router = useRouter();
+
+  // State
+  const [loading, setLoading] = useState(false); // State to track loading
+  const [error, setError] = useState<boolean>(false); // State to track error
+
+  // Construct a form hook
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -45,10 +58,31 @@ export default function Page() {
     },
   });
 
+  // Submit Function
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
-    // Reset the form after submission
-    api.post("/login", data);
-    form.reset();
+    try {
+      // Set Loading to true
+      setLoading(true);
+
+      // Set Error to false
+      setError(false);
+
+      // Reset the form after submission
+      const res = await api.post("/login", data);
+
+      if (res.status === 200) {
+        router.push("/home");
+      }
+    } catch (error) {
+      // Set Error to true
+      setError(true);
+    } finally {
+      // Set Loading to false
+      setLoading(false);
+
+      // Reset the form after submission
+      form.reset();
+    }
   };
 
   return (
@@ -112,7 +146,17 @@ export default function Page() {
                     />
                   </div>
 
-                  <Button type="submit" className="w-full cursor-pointer">
+                  {error && (
+                    <p className="text-destructive text-center text-sm">
+                      Invalid Credentials
+                    </p>
+                  )}
+
+                  <Button
+                    type="submit"
+                    disabled={loading}
+                    className="cursor-pointe w-full"
+                  >
                     Login
                   </Button>
                 </div>
