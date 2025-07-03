@@ -47,7 +47,7 @@ export default function Page() {
 
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     // Reset the form after submission
-    api.post("/login");
+    api.post("/login", data);
     form.reset();
   };
 

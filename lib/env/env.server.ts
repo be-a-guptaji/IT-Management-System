@@ -8,6 +8,8 @@ const serverEnvSchema = z.object({
   DB_NAME: z.string(),
   SALT_ROUNDS: z.coerce.number(),
   API_TIMEOUT: z.coerce.number(),
+  JWT_SECRET: z.string(),
+  JWT_EXPIRES_IN: z.string(),
 });
 
 const parsed = serverEnvSchema.safeParse({
@@ -15,6 +17,8 @@ const parsed = serverEnvSchema.safeParse({
   DB_NAME: process.env.DB_NAME,
   SALT_ROUNDS: process.env.SALT_ROUNDS,
   API_TIMEOUT: process.env.API_TIMEOUT,
+  JWT_SECRET: process.env.JWT_SECRET,
+  JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN,
 });
 
 if (!parsed.success) {

@@ -1,7 +1,7 @@
 // @app/api/login/route.ts
 
-// Response
-import { NextResponse } from "next/server";
+// Next Request and Response
+import { NextRequest, NextResponse } from "next/server";
 
 // Database
 import { connectToDatabase } from "@/lib/db";
@@ -9,12 +9,57 @@ import { connectToDatabase } from "@/lib/db";
 // Models
 import { Admin } from "@/lib/models/Admin.model";
 
-export async function POST() {
+// Environment
+import { envServer } from "@/lib/env/env.server";
+
+// Utility
+import { parseJwtExpiry } from "@/lib/parseJwtExpiry";
+
+export async function POST(req: NextRequest) {
   await connectToDatabase();
 
-  const admin = new Admin({ userName: "admin" });
-  await admin.setPassword("admin");
-  await admin.save();
+  try {
+    // Parse credentials from request body
+    const { userName, password } = await req.json();
 
-  return new NextResponse("Login route called");
+    if (!userName || !password) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Look up admin by username
+    const admin = await Admin.findOne({ userName });
+    if (!admin) {
+      return NextResponse.json({ message: "Admin not found" }, { status: 404 });
+    }
+
+    // Verify password
+    const isMatch = await admin.verifyPassword(password);
+    if (!isMatch) {
+      return NextResponse.json(
+        { message: "Invalid Credentials" },
+        { status: 401 }
+      );
+    }
+
+    // Generate JWT token
+    const token = admin.generateJWTToken();
+
+    // Set token in HTTP-only cookie
+    const response = NextResponse.json({ message: "Login successful" });
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: parseJwtExpiry(envServer.JWT_EXPIRES_IN),
+    });
+
+    return response;
+  } catch (error) {
+    console.error("Error in login route:", error);
+    return NextResponse.json({ message: "Server error" }, { status: 500 });
+  }
 }
