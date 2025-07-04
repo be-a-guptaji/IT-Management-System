@@ -93,7 +93,12 @@ export async function GET(req: NextRequest) {
     }
 
     // Ban the token
-    await BanToken.create({ token: oldToken });
+    await BanToken.create({
+      token: oldToken,
+      expiresAt: new Date(
+        Date.now() + parseJwtExpiry(envServer.JWT_EXPIRES_IN) * 1000
+      ),
+    });
 
     // Verify token
     const verify = jwt.verify(oldToken, envServer.JWT_SECRET) as JwtPayload;
