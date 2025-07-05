@@ -1,4 +1,4 @@
-// @app/(Dashboard)/home/page.tsx
+// @app/(Dashboard)/manage-user/page.tsx
 
 "use client";
 

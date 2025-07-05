@@ -53,7 +53,7 @@ export function NavigationSidebar() {
                     asChild
                     className={cn(
                       "h-full",
-                      pathname === item.url &&
+                      pathname.includes(item.url) &&
                         "bg-blue-500 hover:bg-blue-500 active:bg-blue-500"
                     )}
                   >

@@ -10,7 +10,7 @@ import { connectToDatabase } from "@/lib/db";
 import { Admin } from "@/lib/models/Admin.model";
 import { BanToken } from "@/lib/models/BanToken.model";
 
-// Environment
+// Server Environment Variables
 import { envServer } from "@/lib/env/env.server";
 
 // JWT
