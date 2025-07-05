@@ -1,4 +1,4 @@
-// @app/api/auth/route.ts
+// @app/api/auth/validate/route.ts
 
 // Next Request and Response
 import { NextRequest, NextResponse } from "next/server";

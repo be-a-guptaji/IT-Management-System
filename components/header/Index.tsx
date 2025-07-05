@@ -1,5 +1,7 @@
 // @components/header/index.tsx
 
+"use client";
+
 // Components
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
@@ -10,8 +12,23 @@ import { LogOut } from "lucide-react";
 
 // Utility
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import api from "@/lib/axios/axios.client";
 
 export const Header = () => {
+  // Router
+  const router = useRouter();
+
+  // Function to handle logout
+  const logOut = async () => {
+    try {
+      await api.post("/log-out");
+      router.push("/login");
+    } catch {
+      // Handle error silently
+    }
+  };
+
   return (
     <>
       <div className="sticky top-0 z-50 bg-white dark:bg-[#1c1917]">
@@ -26,7 +43,10 @@ export const Header = () => {
             </Link>
           </div>
           <div className="flex items-center justify-center gap-4">
-            <Button className="flex cursor-pointer items-center gap-2 bg-red-500 hover:scale-105 hover:bg-red-600 active:scale-95">
+            <Button
+              onClick={logOut}
+              className="flex cursor-pointer items-center gap-2 bg-red-500 hover:scale-105 hover:bg-red-600 active:scale-95"
+            >
               <span className="flex items-center gap-1 font-semibold">
                 Logout <LogOut />
               </span>

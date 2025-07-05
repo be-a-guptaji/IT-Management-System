@@ -6,7 +6,7 @@ import mongoose, { Document, Schema, Model } from "mongoose";
 // Document interface
 export interface IBanToken extends Document {
   token: string;
-  expiresAt: Date; 
+  expiresAt: Date;
 }
 
 // Schema definition
@@ -19,7 +19,7 @@ const BanTokenSchema = new Schema<IBanToken>(
     },
     expiresAt: {
       type: Date,
-      required: true, 
+      required: true,
     },
   },
   {

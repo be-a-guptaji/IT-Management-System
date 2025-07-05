@@ -91,7 +91,7 @@ export default function Page() {
     const checkLogin = async () => {
       try {
         // Make a request to check if the user is already logged in
-        const res = await api.get("/login");
+        const res = await api.post("/auth/verify");
 
         // If the user is already logged in, redirect to the home page
         if (res.status === 200) {

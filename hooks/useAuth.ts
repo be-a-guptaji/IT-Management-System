@@ -22,7 +22,7 @@ export function useAuth() {
     // Function to check auth
     async function checkAuth() {
       try {
-        const res = await api.get("/auth");
+        const res = await api.get("/auth/validate");
 
         if (res.status === 200) {
           // If authenticated, set loading to false
