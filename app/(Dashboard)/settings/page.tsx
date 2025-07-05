@@ -1,4 +1,4 @@
-// @app/(Dashboard)/settings/page.tsx
+// @app/(Dashboard)/settings/Page.tsx
 
 "use client";
 
@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { ArrowRight } from "lucide-react";
 
-const page = () => {
+const Page = () => {
   // Hooks to check auth
   const { loading } = useAuth();
 
@@ -42,4 +42,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

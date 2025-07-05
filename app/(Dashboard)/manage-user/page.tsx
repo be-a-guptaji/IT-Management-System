@@ -1,4 +1,4 @@
-// @app/(Dashboard)/manage-user/page.tsx
+// @app/(Dashboard)/manage-user/Page.tsx
 
 "use client";
 
@@ -13,7 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 // Icons
 import { Search } from "lucide-react";
 
-const page = () => {
+const Page = () => {
   // Hooks to check auth
   const { loading } = useAuth();
 
@@ -40,4 +40,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

@@ -59,6 +59,7 @@ AdminSchema.methods.verifyPassword = async function (
 
 // Method: Generate JWT
 AdminSchema.methods.generateJWTToken = function (this: IAdmin) {
+  // @ts-ignore
   return jwt.sign({ id: this._id }, envServer.JWT_SECRET, {
     expiresIn: envServer.JWT_EXPIRES_IN,
   });

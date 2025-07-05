@@ -73,7 +73,7 @@ export default function Page() {
       if (res.status === 200) {
         router.push("/home");
       }
-    } catch (error) {
+    } catch {
       // Set Error to true
       setError(true);
     } finally {
