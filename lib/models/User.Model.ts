@@ -1,4 +1,4 @@
-// @lib/models/User.Model.ts
+// @/lib/models/User.Model.ts
 
 // Mongoose
 import mongoose, { Schema, Document, Model, model } from "mongoose";
@@ -52,6 +52,14 @@ const UserSchema: Schema<IUser> = new Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+      versionKey: false,
+      transform: (_, ret) => {
+        ret.id = ret._id.toString(); // Convert _id to id
+        delete ret._id;
+      },
+    },
   }
 );
 

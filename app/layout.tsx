@@ -1,4 +1,4 @@
-// @app/layout.tsx
+// @/app/layout.tsx
 
 // Description
 import type { Metadata } from "next";
@@ -6,6 +6,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 
 // Types
 import { ReactNode } from "react";
+
+// Components
+import { Toaster } from "@/components/ui/sonner";
 
 // CSS
 import "./globals.css";
@@ -36,6 +39,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <main className="h-screen w-screen">{children}</main>
+        <Toaster />
       </body>
     </html>
   );

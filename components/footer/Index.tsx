@@ -1,4 +1,4 @@
-// @components/footer/Index.tsx
+// @/components/footer/Index.tsx
 
 // Utility
 import Link from "next/link";

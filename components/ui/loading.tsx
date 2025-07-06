@@ -1,4 +1,4 @@
-// @components/ui/loading.tsx
+// @/components/ui/loading.tsx
 
 // Icons
 import { Loader2 } from "lucide-react";

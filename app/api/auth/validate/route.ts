@@ -1,4 +1,4 @@
-// @app/api/auth/validate/route.ts
+// @/app/api/auth/validate/route.ts
 
 // Next Request and Response
 import { NextRequest, NextResponse } from "next/server";
@@ -54,7 +54,10 @@ export async function GET(req: NextRequest) {
     }
 
     // Return success message
-    return NextResponse.json({ message: "Login successful" });
+    return NextResponse.json({
+      message: "Login successful",
+      admin: admin.userName,
+    });
   } catch (error) {
     console.error("JWT verification error:", error);
     return NextResponse.json(

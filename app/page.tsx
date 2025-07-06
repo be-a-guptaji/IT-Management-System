@@ -1,4 +1,4 @@
-// @app/page.tsx
+// @/app/page.tsx
 
 "use client";
 
@@ -35,6 +35,9 @@ import { useState, useEffect } from "react";
 // Icons
 import { Building2 } from "lucide-react";
 
+// Store
+import { useUserStore } from "@/lib/store/useStore";
+
 // Login Form Schema
 const loginFormSchema = z.object({
   userName: z.string().min(1),
@@ -44,6 +47,9 @@ const loginFormSchema = z.object({
 export default function Page() {
   // Router
   const router = useRouter();
+
+  // Store
+  const { setName } = useUserStore();
 
   // State
   const [loading, setLoading] = useState(false); // State to track loading
@@ -92,6 +98,11 @@ export default function Page() {
       try {
         // Make a request to check if the user is already logged in
         const res = await api.post("/auth/verify");
+
+        // If the user is logged in, set the name in the store
+        if (res.status === 200) {
+          setName(res.data.admin);
+        }
 
         // If the user is already logged in, redirect to the home page
         if (res.status === 200) {

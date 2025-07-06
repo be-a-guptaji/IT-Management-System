@@ -1,4 +1,4 @@
-// @hooks/useAuth.ts
+// @/hooks/useAuth.ts
 
 "use client";
 
@@ -11,9 +11,15 @@ import api from "@/lib/axios/axios.client";
 // Router
 import { useRouter } from "next/navigation";
 
+// Store
+import { useUserStore } from "@/lib/store/useStore";
+
 export function useAuth() {
   // Router
   const router = useRouter();
+
+  // Store
+  const { setName } = useUserStore();
 
   // State
   const [loading, setLoading] = useState(true); // State to track loading
@@ -22,7 +28,13 @@ export function useAuth() {
     // Function to check auth
     async function checkAuth() {
       try {
+        // Make a request to check auth
         const res = await api.get("/auth/validate");
+
+        // If the user is logged in, set the name in the store
+        if (res.status === 200) {
+          setName(res.data.admin);
+        }
 
         if (res.status === 200) {
           // If authenticated, set loading to false

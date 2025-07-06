@@ -1,4 +1,4 @@
-// @lib/db.ts
+// @/lib/db.ts
 
 import mongoose from "mongoose";
 import { envServer } from "@/lib/env/env.server";

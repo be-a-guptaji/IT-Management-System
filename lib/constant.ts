@@ -1,4 +1,4 @@
-// @lib/constant.ts
+// @/lib/constant.ts
 
 // Icons
 import { Edit, Home, Settings, UserPlus } from "lucide-react";

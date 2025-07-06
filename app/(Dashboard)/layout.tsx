@@ -1,4 +1,4 @@
-// @app/(Dashboard)/layout.tsx
+// @/app/(Dashboard)/layout.tsx
 
 // Components
 import { SidebarProvider } from "@/components/ui/sidebar";

@@ -1,4 +1,4 @@
-// @app/api/auth/verify/route.ts
+// @/app/api/auth/verify/route.ts
 
 // Next Request and Response
 import { NextRequest, NextResponse } from "next/server";
@@ -68,7 +68,10 @@ export async function POST(req: NextRequest) {
     const token = admin.generateJWTToken();
 
     // Set token in HTTP-only cookie
-    const response = NextResponse.json({ message: "Login successful" });
+    const response = NextResponse.json({
+      message: "Login successful",
+      admin: admin.userName,
+    });
     response.cookies.set("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

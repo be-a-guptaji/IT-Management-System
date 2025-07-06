@@ -1,4 +1,4 @@
-// @lib/models/Device.Model.ts
+// @/lib/models/Device.Model.ts
 
 // Mongoose
 import mongoose, { Schema, Document, model } from "mongoose";
@@ -6,6 +6,7 @@ import mongoose, { Schema, Document, model } from "mongoose";
 // Define User document interface
 export interface IDevice extends Document {
   user: Schema.Types.ObjectId;
+  deviceName: string;
   macAddress: string;
   ipAddress: string;
   serialNumber: string;
@@ -19,6 +20,10 @@ const DeviceSchema: Schema<IDevice> = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
+    },
+    deviceName: {
+      type: String,
+      trim: true,
     },
     macAddress: {
       type: String,

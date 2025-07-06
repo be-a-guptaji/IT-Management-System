@@ -1,4 +1,4 @@
-// @lib/parseJwtExpiry.ts
+// @/lib/parseJwtExpiry.ts
 
 export function parseJwtExpiry(duration: string): number {
   const match = duration.toLowerCase().match(/^(\d+)([smhd])$/);

@@ -1,4 +1,4 @@
-// @components/navigation/index.tsx
+// @/components/navigation/index.tsx
 
 "use client";
 
@@ -27,9 +27,15 @@ import { cn } from "@/lib/utils";
 // Constants
 import { NavigationItems } from "@/lib/constant";
 
+// Store
+import { useUserStore } from "@/lib/store/useStore";
+
 export function NavigationSidebar() {
   // Get the current pathname
   const pathname = usePathname();
+
+  // Store
+  const { name } = useUserStore();
 
   return (
     <Sidebar>
@@ -71,9 +77,9 @@ export function NavigationSidebar() {
       <SidebarFooter className="cursor-default">
         <div className="flex h-16 items-center justify-start gap-4 rounded-md border bg-black/5 px-4 dark:bg-zinc-800/50">
           <p className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-lg font-semibold text-white">
-            A
+            {name[0].toUpperCase()}
           </p>
-          <p className="font-medium">Aryan</p>
+          <p className="font-medium">{name}</p>
         </div>
       </SidebarFooter>
     </Sidebar>

@@ -1,4 +1,4 @@
-// @lib/models/BanToken.model.ts
+// @/lib/models/BanToken.model.ts
 
 // Mongoose
 import mongoose, { Document, Schema, Model } from "mongoose";

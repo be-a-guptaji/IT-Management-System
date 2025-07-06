@@ -1,4 +1,4 @@
-// @app/not-found.tsx
+// @/app/not-found.tsx
 
 // Hooks
 import { redirect } from "next/navigation";

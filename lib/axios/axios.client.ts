@@ -1,4 +1,4 @@
-// @lib/axios/axios.client.ts
+// @/lib/axios/axios.client.ts
 
 // Axios
 import axios from "axios";

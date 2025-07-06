@@ -1,4 +1,4 @@
-// @components/ui/UserBox.tsx
+// @/components/ui/UserBox.tsx
 
 // React
 import React from "react";

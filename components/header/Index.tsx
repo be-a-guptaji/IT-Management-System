@@ -1,4 +1,4 @@
-// @components/header/index.tsx
+// @/components/header/index.tsx
 
 "use client";
 
@@ -15,15 +15,31 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import api from "@/lib/axios/axios.client";
 
+// Store
+import { useUserStore } from "@/lib/store/useStore";
+
 export const Header = () => {
   // Router
   const router = useRouter();
 
+  // Store
+  const { resetName } = useUserStore();
+
   // Function to handle logout
   const logOut = async () => {
     try {
-      await api.post("/log-out");
-      router.push("/login");
+      // Make a request to log out
+      const res = await api.post("/log-out");
+
+      //
+      if (res.status === 200) {
+        resetName();
+      }
+
+      // If logged out, redirect to login
+      if (res.status === 200) {
+        router.push("/login");
+      }
     } catch {
       // Handle error silently
     }
