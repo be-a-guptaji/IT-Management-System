@@ -33,6 +33,8 @@ export async function POST(req: NextRequest) {
 
     // Look up admin by username
     const admin = await Admin.findOne({ userName });
+
+    // If admin not found, return error
     if (!admin) {
       return NextResponse.json({ message: "Admin not found" }, { status: 404 });
     }

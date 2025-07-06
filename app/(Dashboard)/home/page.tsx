@@ -23,8 +23,10 @@ import api from "@/lib/axios/axios.client";
 import { IUser } from "@/lib/models/User.model";
 
 const Page = () => {
+  // Hooks
   const { loading } = useAuth();
 
+  // State
   const [data, setData] = useState<IUser[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
