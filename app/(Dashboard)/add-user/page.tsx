@@ -24,9 +24,11 @@ import { z } from "zod";
 import { useAuth } from "@/hooks/useAuth";
 
 const formSchema = z.object({
-  firstName: z.string().min(1),
-  middelName: z.string().min(1),
-  lastName: z.string().min(1),
+  name: z.object({
+    firstName: z.string().min(1),
+    middelName: z.string().optional(),
+    lastName: z.string().optional(),
+  }),
   designation: z.string().min(1),
   para: z.coerce.number(),
 });
@@ -39,9 +41,9 @@ const Page = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      firstName: "",
-      middelName: "",
-      lastName: "",
+      name: {
+        firstName: "",
+      },
       designation: "",
       para: 0,
     },
@@ -68,7 +70,7 @@ const Page = () => {
               <div className="flex gap-4">
                 <FormField
                   control={form.control}
-                  name="firstName"
+                  name="name.firstName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>First Name</FormLabel>
@@ -82,7 +84,7 @@ const Page = () => {
 
                 <FormField
                   control={form.control}
-                  name="middelName"
+                  name="name.middelName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Middle Name</FormLabel>
@@ -96,7 +98,7 @@ const Page = () => {
 
                 <FormField
                   control={form.control}
-                  name="lastName"
+                  name="name.lastName"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Last Name</FormLabel>

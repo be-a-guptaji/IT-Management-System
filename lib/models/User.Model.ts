@@ -1,7 +1,7 @@
 // @lib/models/User.Model.ts
 
 // Mongoose
-import mongoose, { Schema, Document, model } from "mongoose";
+import mongoose, { Schema, Document, Model, model } from "mongoose";
 
 // Define User document interface
 export interface IUser extends Document {
@@ -12,6 +12,7 @@ export interface IUser extends Document {
   };
   designation: string;
   para: number;
+  deleted: boolean;
 }
 
 // Define schema
@@ -44,6 +45,10 @@ const UserSchema: Schema<IUser> = new Schema(
       required: true,
       min: 0,
     },
+    deleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
@@ -51,4 +56,5 @@ const UserSchema: Schema<IUser> = new Schema(
 );
 
 // Create and export model
-export default mongoose.models.User || model<IUser>("User", UserSchema);
+export const User: Model<IUser> =
+  mongoose.models.User || model<IUser>("User", UserSchema);

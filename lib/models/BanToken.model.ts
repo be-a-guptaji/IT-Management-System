@@ -28,13 +28,7 @@ const BanTokenSchema = new Schema<IBanToken>(
 );
 
 // TTL index on 'expiresAt'
-BanTokenSchema.index(
-  { expiresAt: 1 },
-  {
-    expireAfterSeconds: 0,
-    partialFilterExpression: { token: { $exists: true } },
-  }
-);
+BanTokenSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 // Export model
 export const BanToken: Model<IBanToken> =
