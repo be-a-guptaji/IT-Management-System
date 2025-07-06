@@ -10,6 +10,7 @@ import { connectToDatabase } from "@/lib/db";
 import { Admin } from "@/lib/models/Admin.model";
 import { BanToken } from "@/lib/models/BanToken.model";
 import { User } from "@/lib/models/User.model";
+import { Device } from "@/lib/models/Device.model";
 
 // Environment
 import { envServer } from "@/lib/env/env.server";
@@ -36,7 +37,7 @@ export async function POST(
     // Check if token is already banned
     const bannedToken = await BanToken.findOne({ token });
 
-    // If token is banned, return error`
+    // If token is banned, return error
     if (bannedToken) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
@@ -58,20 +59,20 @@ export async function POST(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    // Check if name is present
+    // Extract name from params
     const { name } = await params;
 
-    // Find users by name
-    const users = await User.aggregate([
+    // Find users by name with fullName field for matching
+    const rawUsers = await User.aggregate([
       {
         $addFields: {
           fullName: {
             $concat: [
               "$name.firstName",
               " ",
-              "$name.middleName",
+              { $ifNull: ["$name.middleName", ""] },
               " ",
-              "$name.lastName",
+              { $ifNull: ["$name.lastName", ""] },
             ],
           },
         },
@@ -84,13 +85,25 @@ export async function POST(
       },
     ]);
 
-    // Return success message
+    // Attach devices array to each user
+    const usersWithDevices = await Promise.all(
+      rawUsers.map(async (user) => {
+        const devices = await Device.find({ user: user._id });
+        return {
+          ...user,
+          devices: devices,
+        };
+      })
+    );
+
+    // Return success response
     return NextResponse.json({
       message: "Users fetched successfully",
-      users: users,
+      users: usersWithDevices,
     });
-  } catch {
-    // If error, return 500
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    // Return internal server error
     return NextResponse.json(
       { message: "Error while fetching users" },
       { status: 500 }

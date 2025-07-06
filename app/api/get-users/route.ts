@@ -10,12 +10,16 @@ import { connectToDatabase } from "@/lib/db";
 import { Admin } from "@/lib/models/Admin.model";
 import { BanToken } from "@/lib/models/BanToken.model";
 import { User } from "@/lib/models/User.model";
+import { Device } from "@/lib/models/Device.model";
 
 // Environment
 import { envServer } from "@/lib/env/env.server";
 
 // JWT
 import jwt, { JwtPayload } from "jsonwebtoken";
+
+// Types
+import { IUser } from "@/lib/models/User.model";
 
 export async function POST(req: NextRequest) {
   // Connect to database
@@ -56,12 +60,23 @@ export async function POST(req: NextRequest) {
     }
 
     // Get all the Users
-    const users = await User.find({ deleted: false });
+    const rawUsers = await User.find({ deleted: false });
+
+    // Attach device count to each user
+    const usersWithDeviceCount = await Promise.all(
+      rawUsers.map(async (user) => {
+        const devices = await Device.find({ user: user._id });
+        return {
+          ...user.toObject(),
+          devices: [...devices],
+        };
+      })
+    );
 
     // Return success message
     return NextResponse.json({
       message: "Users fetched successfully",
-      users: users,
+      users: usersWithDeviceCount,
     });
   } catch {
     // If error, return 500
