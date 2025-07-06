@@ -76,7 +76,7 @@ export function NavigationSidebar() {
       </SidebarContent>
       <SidebarFooter className="cursor-default">
         <div className="flex h-16 items-center justify-start gap-4 rounded-md border bg-black/5 px-4 dark:bg-zinc-800/50">
-          <p className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500 text-lg font-semibold text-white">
+          <p className="flex !size-8 items-center justify-center rounded-full bg-blue-500 text-lg font-semibold text-white">
             {name[0]?.toUpperCase()}
           </p>
           <p className="font-medium">{name}</p>
