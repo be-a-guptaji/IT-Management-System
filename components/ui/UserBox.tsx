@@ -17,7 +17,7 @@ type UserBoxProps = {
 const UserBox: React.FC<UserBoxProps> = ({ user }) => {
   return (
     <>
-      <div className="h-56 flex-1 cursor-pointer rounded-md border border-black/10 bg-white transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-xl active:scale-95">
+      <div className="h-56 cursor-pointer rounded-md border border-black/10 bg-white transition-transform duration-200 ease-in-out hover:scale-105 hover:shadow-xl active:scale-95">
         <Link href={`/manage-user/${user.id}`}>
           <div className="w-56 px-4 py-6">
             {/* User name and para number */}

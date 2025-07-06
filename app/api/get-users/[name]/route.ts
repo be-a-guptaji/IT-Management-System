@@ -1,4 +1,4 @@
-// @/app/api/get-users/route.ts
+// @/app/api/get-users/[name]/route.ts
 
 // Next Request and Response
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +17,10 @@ import { envServer } from "@/lib/env/env.server";
 // JWT
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ name: string }> }
+) {
   // Connect to database
   await connectToDatabase();
 
@@ -55,8 +58,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    // Get all the Users
-    const users = await User.find({ deleted: false });
+    // Check if name is present
+    const { name } = await params;
+
+    // Find users by name
+    const users = await User.aggregate([
+      {
+        $addFields: {
+          fullName: {
+            $concat: [
+              "$name.firstName",
+              " ",
+              "$name.middleName",
+              " ",
+              "$name.lastName",
+            ],
+          },
+        },
+      },
+      {
+        $match: {
+          fullName: { $regex: name, $options: "i" },
+          deleted: false,
+        },
+      },
+    ]);
 
     // Return success message
     return NextResponse.json({
