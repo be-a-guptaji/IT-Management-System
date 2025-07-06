@@ -1,4 +1,4 @@
-// @/app/(Dashboard)/manage-devices/[UserID]/Page.tsx
+// @/app/(Dashboard)/manage-devices/[UserID]/page.tsx
 
 // Types
 import { ManageUserPageProps } from "@/lib/types";
