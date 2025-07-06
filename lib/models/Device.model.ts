@@ -1,7 +1,7 @@
 // @/lib/models/Device.Model.ts
 
 // Mongoose
-import mongoose, { Schema, Document, model } from "mongoose";
+import mongoose, { Schema, Document, model, Model } from "mongoose";
 
 // Define User document interface
 export interface IDevice extends Document {
@@ -48,4 +48,5 @@ const DeviceSchema: Schema<IDevice> = new Schema(
 );
 
 // Create and export model
-export default mongoose.models.User || model<IDevice>("Device", DeviceSchema);
+export const Device: Model<IDevice> =
+  mongoose.models.Device || model<IDevice>("Device", DeviceSchema);

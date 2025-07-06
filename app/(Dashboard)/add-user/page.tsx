@@ -19,6 +19,7 @@ import Loading from "@/components/ui/loading";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
+import api from "@/lib/axios/axios.client";
 
 // Sonner
 import { toast } from "sonner";
@@ -26,11 +27,14 @@ import { toast } from "sonner";
 // Hooks
 import { useAuth } from "@/hooks/useAuth";
 
+// React
+import { useState } from "react";
+
 // Define Zod schema for form validation
 const formSchema = z.object({
   name: z.object({
     firstName: z.string().min(1),
-    middelName: z.string().optional(),
+    middleName: z.string().optional(),
     lastName: z.string().optional(),
   }),
   designation: z.string().min(1),
@@ -51,13 +55,16 @@ const Page = () => {
   // Hooks to check auth
   const { loading } = useAuth();
 
+  // State
+  const [submitting, setSubmitting] = useState(false);
+
   // Construct a form hook
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: {
         firstName: "",
-        middelName: "",
+        middleName: "",
         lastName: "",
       },
       designation: "",
@@ -94,8 +101,31 @@ const Page = () => {
 
   // Handle form submission
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data);
-    form.reset();
+    try {
+      // Set submitting to true
+      setSubmitting(true);
+
+      if (data.para <= 0) {
+        toast.error("Para number must be greater than 0");
+        return;
+      }
+
+      // Make a request to add the user
+      const res = await api.post("/register-user", data);
+
+      // If the request is successful, show success message
+      if (res.status === 200) {
+        toast.success("User added successfully");
+      }
+    } catch {
+      // If the request fails, show error message
+      toast.error("Failed to add user");
+    } finally {
+      // Set submitting to false
+      setSubmitting(false);
+      // Reset the form
+      form.reset();
+    }
   };
 
   return (
@@ -124,7 +154,7 @@ const Page = () => {
 
               <FormField
                 control={form.control}
-                name="name.middelName"
+                name="name.middleName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Middle Name</FormLabel>
@@ -273,7 +303,11 @@ const Page = () => {
               >
                 Add Device
               </Button>
-              <Button type="submit" className="w-32 cursor-pointer">
+              <Button
+                type="submit"
+                className="w-32 cursor-pointer disabled:bg-gray-400 disabled:text-gray-300"
+                disabled={submitting}
+              >
                 Submit
               </Button>
             </div>

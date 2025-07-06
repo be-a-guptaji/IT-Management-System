@@ -7,8 +7,8 @@ import mongoose, { Schema, Document, Model, model } from "mongoose";
 export interface IUser extends Document {
   name: {
     firstName: string;
-    middleName: string;
-    lastName: string;
+    middleName?: string;
+    lastName?: string;
   };
   designation: string;
   para: number;
@@ -26,12 +26,10 @@ const UserSchema: Schema<IUser> = new Schema(
       },
       middleName: {
         type: String,
-        required: true,
         trim: true,
       },
       lastName: {
         type: String,
-        required: true,
         trim: true,
       },
     },
@@ -43,7 +41,7 @@ const UserSchema: Schema<IUser> = new Schema(
     para: {
       type: Number,
       required: true,
-      min: 0,
+      min: 1,
     },
     deleted: {
       type: Boolean,
