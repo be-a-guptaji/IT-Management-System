@@ -25,35 +25,27 @@ export function useAuth() {
   const [loading, setLoading] = useState(true); // State to track loading
 
   useEffect(() => {
-    // Function to check auth
-    async function checkAuth() {
+    // Check if user is already logged in
+    (async () => {
       try {
-        // Make a request to check auth
+        // Make a request to check if the user is already logged in
         const res = await api.get("/auth/validate");
 
         // If the user is logged in, set the name in the store
         if (res.status === 200) {
           setName(res.data.admin);
-        }
-
-        if (res.status === 200) {
-          // If authenticated, set loading to false
-          setLoading(false);
         } else {
-          // If not authenticated, redirect to login
+          // If the user is not logged in, redirect to login
           router.push("/login");
         }
       } catch {
         // If error, redirect to login
         router.push("/login");
       } finally {
-        // Set loading to false
+        // Set Loading to false
         setLoading(false);
       }
-    }
-
-    // Check auth on mount
-    checkAuth();
+    })();
   }, []);
 
   return { loading };

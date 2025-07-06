@@ -34,7 +34,7 @@ const Page = () => {
           variant="outline"
           className="flex h-14 w-full max-w-4xl cursor-pointer items-center justify-between px-8 font-medium hover:scale-105 hover:shadow-md active:scale-95"
         >
-          Change User Name
+          Change Password
           <ArrowRight />
         </Button>
       </div>
