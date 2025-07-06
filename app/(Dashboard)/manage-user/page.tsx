@@ -20,14 +20,14 @@ import { useAuth } from "@/hooks/useAuth";
 import api from "@/lib/axios/axios.client";
 
 // Types
-import { IUser } from "@/lib/models/User.model";
+import { UserWithDevices } from "@/lib/types";
 
 const Page = () => {
   // Hooks
   const { loading } = useAuth();
 
   // State
-  const [data, setData] = useState<IUser[]>([]);
+  const [data, setData] = useState<UserWithDevices[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
 
@@ -78,7 +78,7 @@ const Page = () => {
       {/* Users Grid */}
       <div className="flex min-h-full flex-wrap items-start justify-start gap-12 p-16">
         {data.map((user) => (
-          <UserBox key={user.id} user={user} />
+          <UserBox key={String(user._id)} user={user} />
         ))}
       </div>
     </>
