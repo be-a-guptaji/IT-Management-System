@@ -29,7 +29,7 @@ export const Header = () => {
   const logOut = async () => {
     try {
       // Make a request to log out
-      const res = await api.post("/log-out");
+      const res = await api.post("/auth/log-out");
 
       //
       if (res.status === 200) {

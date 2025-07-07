@@ -111,7 +111,7 @@ const Page = () => {
       }
 
       // Make a request to add the user
-      const res = await api.post("/register-user", data);
+      const res = await api.post("/user/register-user", data);
 
       // If the request is successful, show success message
       if (res.status === 200) {

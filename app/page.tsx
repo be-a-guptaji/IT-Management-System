@@ -74,7 +74,7 @@ export default function Page() {
       setError(false);
 
       // Reset the form after submission
-      const res = await api.post("/login", data);
+      const res = await api.post("/auth/login", data);
 
       if (res.status === 200) {
         router.push("/home");

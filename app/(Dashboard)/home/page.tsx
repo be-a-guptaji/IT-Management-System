@@ -46,9 +46,9 @@ const Page = () => {
         let res;
 
         if (debouncedValue) {
-          res = await api.post(`/get-users/${debouncedValue}`);
+          res = await api.post(`/user/get-users/${debouncedValue}`);
         } else {
-          res = await api.post("/get-users");
+          res = await api.post("/user/get-users");
         }
 
         if (res.status === 200) {
