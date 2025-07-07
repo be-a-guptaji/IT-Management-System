@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     // Attach device count to each user
     const usersWithDeviceCount = await Promise.all(
       rawUsers.map(async (user) => {
-        const devices = await Device.find({ user: user._id });
+        const devices = await Device.find({ user: user._id, deleted: false });
         return {
           ...user.toObject(),
           devices: [...devices],

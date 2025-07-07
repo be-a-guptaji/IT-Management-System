@@ -88,7 +88,7 @@ export async function POST(
     // Attach devices array to each user
     const usersWithDevices = await Promise.all(
       rawUsers.map(async (user) => {
-        const devices = await Device.find({ user: user._id });
+        const devices = await Device.find({ user: user._id, deleted: false });
         return {
           ...user,
           devices: devices,

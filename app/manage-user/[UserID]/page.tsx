@@ -45,6 +45,7 @@ const formSchema = z.object({
   devices: z
     .array(
       z.object({
+        id: z.string().optional(),
         deviceName: z.string().min(1, "Device name is required"),
         macAddress: z.string(),
         ipAddress: z.string(),
@@ -55,9 +56,13 @@ const formSchema = z.object({
 });
 
 export default function Page({ params }: ManageUserPageProps) {
+  // Hooks for auth
   const { loading } = useAuth();
-  const [submitting, setSubmitting] = useState(false);
 
+  // State
+  const [submitting, setSubmitting] = useState(false); // State to track submitting
+
+  // Construct a form hook
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,11 +77,13 @@ export default function Page({ params }: ManageUserPageProps) {
     },
   });
 
+  // Field array
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "devices",
   });
 
+  // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
       // Get user id from params
@@ -96,16 +103,19 @@ export default function Page({ params }: ManageUserPageProps) {
     fetchUser();
   }, [params, form]);
 
+  // Loading screen until data is varified
   if (loading) {
     return <Loading />;
   }
 
+  // Function to add device
   const handleAddDevice = () => {
     const devices = form.getValues("devices") ?? [];
     const allNamed = devices.every((device) => device.deviceName.trim() !== "");
 
     if (allNamed) {
       append({
+        id: "",
         deviceName: "",
         macAddress: "",
         ipAddress: "",
@@ -116,24 +126,33 @@ export default function Page({ params }: ManageUserPageProps) {
     }
   };
 
+  // Submit handler
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
+      // Set submitting to true
       setSubmitting(true);
 
+      // Get user id from params
       if (data.para <= 0) {
         toast.error("Para number must be greater than 0");
         return;
       }
 
-      const res = await api.post("/user/register-user", data);
+      // Get user id from params
+      const { userID } = await params;
 
+      // Make api request to edit user
+      const res = await api.post(`/user/edit/${userID}`, data);
+
+      // If the request is successful show success message
       if (res.status === 200) {
-        toast.success("User added successfully");
-        form.reset();
+        toast.success("User updated successfully");
       }
     } catch {
-      toast.error("Failed to add user");
+      // If the request fails, show error message
+      toast.error("Failed to edit user");
     } finally {
+      // Set submitting to false
       setSubmitting(false);
     }
   };
@@ -241,7 +260,11 @@ export default function Page({ params }: ManageUserPageProps) {
                           <Input
                             placeholder="e.g. Laptop, Router"
                             {...field}
-                            readOnly
+                            readOnly={(() => {
+                              const devices = form.getValues("devices");
+                              if (!devices) return false;
+                              return !!devices[index]?.id;
+                            })()}
                           />
                         </FormControl>
                         <FormMessage />
@@ -260,7 +283,11 @@ export default function Page({ params }: ManageUserPageProps) {
                             <Input
                               placeholder="00:1A:2B:3C:4D:5E"
                               {...field}
-                              readOnly
+                              readOnly={(() => {
+                                const devices = form.getValues("devices");
+                                if (!devices) return false;
+                                return !!devices[index]?.id;
+                              })()}
                             />
                           </FormControl>
                           <FormMessage />
@@ -277,7 +304,11 @@ export default function Page({ params }: ManageUserPageProps) {
                             <Input
                               placeholder="192.168.0.1"
                               {...field}
-                              readOnly
+                              readOnly={(() => {
+                                const devices = form.getValues("devices");
+                                if (!devices) return false;
+                                return !!devices[index]?.id;
+                              })()}
                             />
                           </FormControl>
                           <FormMessage />
@@ -294,7 +325,11 @@ export default function Page({ params }: ManageUserPageProps) {
                             <Input
                               placeholder="Serial Number"
                               {...field}
-                              readOnly
+                              readOnly={(() => {
+                                const devices = form.getValues("devices");
+                                if (!devices) return false;
+                                return !!devices[index]?.id;
+                              })()}
                             />
                           </FormControl>
                           <FormMessage />

@@ -12,6 +12,9 @@ import { BanToken } from "@/lib/models/BanToken.model";
 import { User } from "@/lib/models/User.model";
 import { Device } from "@/lib/models/Device.model";
 
+// Types
+import { IDevice } from "@/lib/models/Device.model";
+
 // Environment
 import { envServer } from "@/lib/env/env.server";
 
@@ -70,37 +73,70 @@ export async function POST(
       );
     }
 
-    // Find user
-    const user = await User.findById(id);
+    // Extract the data from the body
+    const data = await req.json();
+
+    // If data is not present, return error
+    if (!data) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Update user
+    const user = await User.findOneAndUpdate({ _id: id }, data);
 
     // If user is not found, return error
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
-    // Find devices
-    const devices = await Device.find({ userId: id });
+    // Check if devices are present
+    if (data.devices && data.devices.length > 0) {
+      // Find all devices which are not present in the data
+      const devices = await Device.find({ user: user._id, deleted: false });
 
-    // Calculate device count
-    const deviceCount = devices.length;
+      const toDeleteDevices = devices.filter((device: IDevice) =>
+        data.devices.every((d: IDevice) => d.id !== String(device._id))
+      );
 
-    // Create object with user and device count
-    const usersWithDeviceCount = {
-      name: user.name,
-      designation: user.designation,
-      para: user.para,
-      devices: deviceCount,
-    };
+      // If toDeleteDevices is not empty, delete them
+      if (toDeleteDevices.length > 0) {
+        await Promise.all(
+          toDeleteDevices.map((device: IDevice) =>
+            Device.updateOne({ _id: device._id }, { deleted: true })
+          )
+        );
+      }
+    }
+
+    // Check if devices are present
+    if (data.devices && data.devices.length > 0) {
+      // Add new devices
+      await Promise.all(
+        data.devices
+          .filter((device: IDevice) => !device.id)
+          .map((device: IDevice) =>
+            Device.create({
+              user: user._id,
+              deviceName: device.deviceName,
+              macAddress: device.macAddress,
+              ipAddress: device.ipAddress,
+              serialNumber: device.serialNumber,
+            })
+          )
+      );
+    }
 
     // Return success message
     return NextResponse.json({
-      message: "Users fetched successfully",
-      users: usersWithDeviceCount,
+      message: "Users edited successfully",
     });
   } catch {
     // If error, return 500
     return NextResponse.json(
-      { message: "Error while fetching users" },
+      { message: "Error while editing users" },
       { status: 500 }
     );
   }

@@ -70,7 +70,7 @@ export async function POST(
     }
 
     // Attach devices array to each user
-    const devices = await Device.find({ user: id });
+    const devices = await Device.find({ user: id, deleted: false });
 
     const usersWithDevices = {
       ...user.toJSON(),

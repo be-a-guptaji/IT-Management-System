@@ -23,6 +23,7 @@ const DeviceSchema: Schema<IDevice> = new Schema(
     },
     deviceName: {
       type: String,
+      required: true,
       trim: true,
     },
     macAddress: {
