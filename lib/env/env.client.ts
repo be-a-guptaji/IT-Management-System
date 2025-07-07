@@ -1,6 +1,6 @@
 // lib/env.client.ts
 
-// zod
+// Zod
 import { z } from "zod";
 
 const publicSchema = z.object({
@@ -14,11 +14,10 @@ const parsed = publicSchema.safeParse({
 });
 
 if (!parsed.success) {
-  console.error(
-    "Invalid public environment variables:",
-    parsed.error.flatten().fieldErrors
+  throw new Error(
+    "Invalid public environment variables:\n" +
+      JSON.stringify(parsed.error.flatten().fieldErrors, null, 2)
   );
-  process.exit(1);
 }
 
 export const envClient = parsed.data;

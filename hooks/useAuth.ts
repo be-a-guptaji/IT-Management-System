@@ -5,10 +5,8 @@
 // React
 import { useEffect, useState } from "react";
 
-// Axios
+// Utility
 import api from "@/lib/axios/axios.client";
-
-// Router
 import { useRouter } from "next/navigation";
 
 // Store

@@ -1,4 +1,4 @@
-// @/app/(Dashboard)/manage-devices/[UserID]/page.tsx
+// @/app/manage-devices/[UserID]/page.tsx
 
 "use client";
 
