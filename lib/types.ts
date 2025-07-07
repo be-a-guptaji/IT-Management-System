@@ -9,11 +9,8 @@ export type ManageUserPageProps = {
 
 export type UserStore = {
   name: string;
-  completeUser: UserWithDevices | null;
   setName: (name: string) => void;
-  setCompleteUser: (user: UserWithDevices | null) => void;
   resetName: () => void;
-  resetCompleteUser: () => void;
 };
 
 export type UserWithDevices = IUser & { devices: IDevice[] };

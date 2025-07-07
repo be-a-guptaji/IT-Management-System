@@ -10,8 +10,10 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 const UserBox: React.FC<{ user: UserWithDevices }> = ({ user }) => {
+  // Router
   const router = useRouter();
 
+  // Function to handle click
   const handleClick = () => {
     router.push(`/manage-user/${user._id}`);
   };

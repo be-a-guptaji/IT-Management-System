@@ -28,12 +28,12 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
 // React
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 // Types
 import { ManageUserPageProps } from "@/lib/types";
 
-// Define Zod schema for form validation
+// Zod schema for form validation
 const formSchema = z.object({
   name: z.object({
     firstName: z.string().min(1),
@@ -55,13 +55,9 @@ const formSchema = z.object({
 });
 
 export default function Page({ params }: ManageUserPageProps) {
-  // Hooks to check auth
   const { loading } = useAuth();
-
-  // State
   const [submitting, setSubmitting] = useState(false);
 
-  // Construct a form hook
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -72,39 +68,34 @@ export default function Page({ params }: ManageUserPageProps) {
       },
       designation: "",
       para: 0,
-      devices: [], // start with no devices
+      devices: [],
     },
   });
 
-  // Manage dynamic device fields
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "devices",
   });
 
-  // Use Effect to fetch user data
   useEffect(() => {
-    (async () => {
-      try {
-        // Get user ID
-        const { userID } = await params;
+    const fetchUser = async () => {
+      // Get user id from params
+      const { userID } = await params;
+      // Fetch user data
+      const res = await api.post(`/user/get-user-by-id/${userID}`);
+      const data = res.data.user;
 
-        // Fetch user data
-        const res = await api.post(`/user/edit/${userID}`);
-        console.log(res);
-        if (res.status === 200) {
-          form.setValue("name", res.data.name);
-          form.setValue("designation", res.data.designation);
-          form.setValue("para", res.data.para);
-          form.setValue("devices", res.data.devices);
-        }
-      } catch {
-        toast.error("Failed to fetch user data");
-      }
-    })();
-  }, []);
+      form.setValue("name.firstName", data.name.firstName);
+      form.setValue("name.middleName", data.name?.middleName);
+      form.setValue("name.lastName", data.name?.lastName);
+      form.setValue("designation", data.designation);
+      form.setValue("para", data.para);
+      form.setValue("devices", data.devices);
+    };
 
-  // If loading, show loading message
+    fetchUser();
+  }, [params, form]);
+
   if (loading) {
     return <Loading />;
   }
@@ -112,6 +103,7 @@ export default function Page({ params }: ManageUserPageProps) {
   const handleAddDevice = () => {
     const devices = form.getValues("devices") ?? [];
     const allNamed = devices.every((device) => device.deviceName.trim() !== "");
+
     if (allNamed) {
       append({
         deviceName: "",
@@ -124,10 +116,8 @@ export default function Page({ params }: ManageUserPageProps) {
     }
   };
 
-  // Handle form submission
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      // Set submitting to true
       setSubmitting(true);
 
       if (data.para <= 0) {
@@ -135,21 +125,16 @@ export default function Page({ params }: ManageUserPageProps) {
         return;
       }
 
-      // Make a request to add the user
       const res = await api.post("/user/register-user", data);
 
-      // If the request is successful, show success message
       if (res.status === 200) {
         toast.success("User added successfully");
+        form.reset();
       }
     } catch {
-      // If the request fails, show error message
       toast.error("Failed to add user");
     } finally {
-      // Set submitting to false
       setSubmitting(false);
-      // Reset the form
-      form.reset();
     }
   };
 
@@ -170,13 +155,12 @@ export default function Page({ params }: ManageUserPageProps) {
                   <FormItem>
                     <FormLabel>First Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="First name" {...field} />
+                      <Input placeholder="First name" {...field} readOnly />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="name.middleName"
@@ -184,13 +168,12 @@ export default function Page({ params }: ManageUserPageProps) {
                   <FormItem>
                     <FormLabel>Middle Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Middle name" {...field} />
+                      <Input placeholder="Middle name" {...field} readOnly />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-
               <FormField
                 control={form.control}
                 name="name.lastName"
@@ -198,7 +181,7 @@ export default function Page({ params }: ManageUserPageProps) {
                   <FormItem>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Last name" {...field} />
+                      <Input placeholder="Last name" {...field} readOnly />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -206,7 +189,7 @@ export default function Page({ params }: ManageUserPageProps) {
               />
             </div>
 
-            {/* Designation field */}
+            {/* Designation */}
             <FormField
               control={form.control}
               name="designation"
@@ -221,7 +204,7 @@ export default function Page({ params }: ManageUserPageProps) {
               )}
             />
 
-            {/* Para field */}
+            {/* Para */}
             <FormField
               control={form.control}
               name="para"
@@ -236,18 +219,18 @@ export default function Page({ params }: ManageUserPageProps) {
               )}
             />
 
-            {/* Devices fields */}
+            {/* Devices */}
             <div className="space-y-6">
               <h3 className="text-xl font-semibold">Devices</h3>
               {fields.length === 0 && (
                 <p className="text-sm text-gray-500">No devices added yet.</p>
               )}
+
               {fields.map((field, index) => (
                 <div
                   key={field.id}
                   className="relative flex flex-col gap-4 rounded-md border bg-slate-50 p-4"
                 >
-                  {/* Device Name */}
                   <FormField
                     control={form.control}
                     name={`devices.${index}.deviceName`}
@@ -255,14 +238,17 @@ export default function Page({ params }: ManageUserPageProps) {
                       <FormItem className="w-full">
                         <FormLabel>Device Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="e.g. Laptop, Router" {...field} />
+                          <Input
+                            placeholder="e.g. Laptop, Router"
+                            {...field}
+                            readOnly
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
 
-                  {/* Device Info */}
                   <div className="flex gap-4">
                     <FormField
                       control={form.control}
@@ -271,7 +257,11 @@ export default function Page({ params }: ManageUserPageProps) {
                         <FormItem className="w-full">
                           <FormLabel>MAC Address</FormLabel>
                           <FormControl>
-                            <Input placeholder="00:1A:2B:3C:4D:5E" {...field} />
+                            <Input
+                              placeholder="00:1A:2B:3C:4D:5E"
+                              {...field}
+                              readOnly
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -284,7 +274,11 @@ export default function Page({ params }: ManageUserPageProps) {
                         <FormItem className="w-full">
                           <FormLabel>IP Address</FormLabel>
                           <FormControl>
-                            <Input placeholder="192.168.0.1" {...field} />
+                            <Input
+                              placeholder="192.168.0.1"
+                              {...field}
+                              readOnly
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -297,7 +291,11 @@ export default function Page({ params }: ManageUserPageProps) {
                         <FormItem className="w-full">
                           <FormLabel>Serial Number</FormLabel>
                           <FormControl>
-                            <Input placeholder="Serial Number" {...field} />
+                            <Input
+                              placeholder="Serial Number"
+                              {...field}
+                              readOnly
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -305,7 +303,6 @@ export default function Page({ params }: ManageUserPageProps) {
                     />
                   </div>
 
-                  {/* Remove device button */}
                   <div className="flex justify-end">
                     <Button
                       type="button"
@@ -319,18 +316,18 @@ export default function Page({ params }: ManageUserPageProps) {
               ))}
             </div>
 
-            {/* Submit and Add Device buttons */}
+            {/* Actions */}
             <div className="mb-8 flex justify-between">
               <Button
                 type="button"
-                className="w-32 cursor-pointer bg-blue-500 hover:bg-blue-600"
+                className="w-32 bg-blue-500 hover:bg-blue-600"
                 onClick={handleAddDevice}
               >
                 Add Device
               </Button>
               <Button
                 type="submit"
-                className="w-32 cursor-pointer disabled:bg-gray-400 disabled:text-gray-300"
+                className="w-32 disabled:bg-gray-400 disabled:text-gray-300"
                 disabled={submitting}
               >
                 Submit
