@@ -6,7 +6,7 @@
 import { useEffect, useState } from "react";
 
 // Utility
-import api from "@/lib/axios/axios.client";
+import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
 
 // Store

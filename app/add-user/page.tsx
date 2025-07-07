@@ -17,7 +17,7 @@ import Loading from "@/components/ui/loading";
 
 // Utility
 import { z } from "zod";
-import api from "@/lib/axios/axios.client";
+import api from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 

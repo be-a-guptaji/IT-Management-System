@@ -35,6 +35,7 @@ export async function POST(req: NextRequest) {
         Date.now() + parseJwtExpiry(envServer.JWT_EXPIRES_IN) * 1000
       ),
     });
+
     // Clear cookie
     const response = NextResponse.json({ message: "Logged out" });
     response.cookies.delete("token");

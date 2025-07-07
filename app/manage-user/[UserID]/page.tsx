@@ -1,4 +1,4 @@
-// @/app/manage-devices/[UserID]/page.tsx
+// @/app/manage-devices/[userID]/page.tsx
 
 "use client";
 
@@ -17,7 +17,7 @@ import Loading from "@/components/ui/loading";
 
 // Utility
 import { z } from "zod";
-import api from "@/lib/axios/axios.client";
+import api from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 
@@ -28,7 +28,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
 // React
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Types
 import { ManageUserPageProps } from "@/lib/types";
@@ -58,9 +58,6 @@ export default function Page({ params }: ManageUserPageProps) {
   // Hooks to check auth
   const { loading } = useAuth();
 
-  // Get user ID
-  // const { UserID } = await params;
-
   // State
   const [submitting, setSubmitting] = useState(false);
 
@@ -84,6 +81,28 @@ export default function Page({ params }: ManageUserPageProps) {
     control: form.control,
     name: "devices",
   });
+
+  // Use Effect to fetch user data
+  useEffect(() => {
+    (async () => {
+      try {
+        // Get user ID
+        const { userID } = await params;
+
+        // Fetch user data
+        const res = await api.post(`/user/edit/${userID}`);
+        console.log(res);
+        if (res.status === 200) {
+          form.setValue("name", res.data.name);
+          form.setValue("designation", res.data.designation);
+          form.setValue("para", res.data.para);
+          form.setValue("devices", res.data.devices);
+        }
+      } catch {
+        toast.error("Failed to fetch user data");
+      }
+    })();
+  }, []);
 
   // If loading, show loading message
   if (loading) {

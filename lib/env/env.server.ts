@@ -1,6 +1,6 @@
 // lib/env.server.ts
 
-// zod
+// Zod
 import { z } from "zod";
 
 const serverEnvSchema = z.object({

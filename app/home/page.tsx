@@ -17,7 +17,7 @@ import { Search } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 // API
-import api from "@/lib/axios/axios.client";
+import api from "@/lib/axios";
 
 // Types
 import { UserWithDevices } from "@/lib/types";

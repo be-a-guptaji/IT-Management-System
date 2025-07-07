@@ -13,7 +13,7 @@ import { LogOut } from "lucide-react";
 // Utility
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import api from "@/lib/axios/axios.client";
+import api from "@/lib/axios";
 
 // Store
 import { useUserStore } from "@/lib/store/useStore";

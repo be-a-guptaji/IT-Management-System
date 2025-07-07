@@ -1,4 +1,4 @@
-// @/app/api/get-users/route.ts
+// @/app/api/user/edit/[id]/route.ts
 
 // Next Request and Response
 import { NextRequest, NextResponse } from "next/server";
@@ -18,7 +18,10 @@ import { envServer } from "@/lib/env/env.server";
 // JWT
 import jwt, { JwtPayload } from "jsonwebtoken";
 
-export async function POST(req: NextRequest) {
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
   // Connect to database
   await connectToDatabase();
 
@@ -56,19 +59,38 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    // Get all the Users
-    const rawUsers = await User.find({ deleted: false });
+    // Extract id from params
+    const { id } = await params;
 
-    // Attach device count to each user
-    const usersWithDeviceCount = await Promise.all(
-      rawUsers.map(async (user) => {
-        const devices = await Device.find({ user: user._id });
-        return {
-          ...user.toObject(),
-          devices: [...devices],
-        };
-      })
-    );
+    // If id is not present, return error
+    if (!id) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Find user
+    const user = await User.findById(id);
+
+    // If user is not found, return error
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    // Find devices
+    const devices = await Device.find({ userId: id });
+
+    // Calculate device count
+    const deviceCount = devices.length;
+
+    // Create object with user and device count
+    const usersWithDeviceCount = {
+      name: user.name,
+      designation: user.designation,
+      para: user.para,
+      devices: deviceCount,
+    };
 
     // Return success message
     return NextResponse.json({

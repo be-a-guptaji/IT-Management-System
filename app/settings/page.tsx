@@ -40,7 +40,7 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 
 // Utility
-import api from "@/lib/axios/axios.client";
+import api from "@/lib/axios";
 import { toast } from "sonner";
 
 // Schema for changing username
@@ -166,7 +166,7 @@ const Page = () => {
           <DialogHeader>
             <DialogTitle>Change Name</DialogTitle>
             <DialogDescription>
-              Update your name here. Click save when you're done.
+              Update your name here. Click save when you&apos;re done.
             </DialogDescription>
           </DialogHeader>
 

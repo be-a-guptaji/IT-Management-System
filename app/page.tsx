@@ -26,7 +26,7 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import api from "@/lib/axios/axios.client";
+import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -116,7 +116,7 @@ export default function Page() {
         form.reset();
       }
     })();
-  }, [form, router]);
+  }, [form, router, setName]);
 
   return (
     <div className="absolute top-0 left-0 z-50 flex h-screen min-h-screen w-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
