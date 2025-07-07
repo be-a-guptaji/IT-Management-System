@@ -9,6 +9,10 @@ import { ReactNode } from "react";
 
 // Components
 import { Toaster } from "@/components/ui/sonner";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { NavigationSidebar } from "@/components/navigation/Index";
+import { Header } from "@/components/header/Index";
+import { Footer } from "@/components/footer/Index";
 
 // CSS
 import "./globals.css";
@@ -38,8 +42,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <main className="h-screen w-screen">{children}</main>
-        <Toaster />
+        <SidebarProvider>
+          <NavigationSidebar />
+          <main className="h-screen w-full overflow-x-hidden bg-black/[0.07]">
+            <Header />
+            {children}
+            <Footer />
+          </main>
+          <Toaster />
+        </SidebarProvider>
       </body>
     </html>
   );
