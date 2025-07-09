@@ -54,6 +54,7 @@ const UserSchema: Schema<IUser> = new Schema(
       virtuals: true,
       versionKey: false,
       transform: (_, ret) => {
+        // @ts-expect-error - The below line is correct but ts is not able to recognise it
         ret.id = ret._id.toString();
         delete ret._id;
       },

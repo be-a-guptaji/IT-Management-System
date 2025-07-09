@@ -3,7 +3,7 @@
 "use client";
 
 // React
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 // Components
 import { Input } from "@/components/ui/input";
@@ -22,44 +22,107 @@ import { UserWithDevices } from "@/lib/types";
 // POST Services
 import { getSearchedUsers, getUsers } from "@/services/POST";
 
+// Env
+import { envClient } from "@/lib/env/env.client";
+
 const Page = () => {
-  // Hooks
+  // Auth hook to show loading UI
   const { loading } = useAuth();
 
-  // State
-  const [data, setData] = useState<UserWithDevices[]>([]);
+  // State for user data, pagination, loading status, and search
+  const [users, setUsers] = useState<UserWithDevices[]>([]);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
   const [inputValue, setInputValue] = useState("");
   const [debouncedValue, setDebouncedValue] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
 
-  // Debounce search input
+  // Ref for the "load more" div to observe scroll position
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
+  // Debounce search input to avoid excessive requests
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const timeout = setTimeout(() => {
       setDebouncedValue(inputValue.trim());
     }, 500);
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timeout);
   }, [inputValue]);
 
-  // Fetch users based on search
+  // Reset users and pagination when search term changes
   useEffect(() => {
-    (async () => {
-      try {
-        let res;
-
-        if (debouncedValue) {
-          res = await getSearchedUsers(debouncedValue);
-        } else {
-          res = await getUsers();
-        }
-
-        if (res.status === 200) {
-          setData(res.data.users);
-        }
-      } catch {
-        console.error("Failed to fetch users");
-      }
-    })();
+    setUsers([]);
+    setPage(1);
+    setHasMore(true);
   }, [debouncedValue]);
 
+  // Fetch users (based on search and pagination)
+  const fetchUsers = useCallback(async () => {
+    if (!hasMore || isFetching) return;
+
+    setIsFetching(true);
+
+    try {
+      // Fetch either searched or paginated users
+      const res = debouncedValue
+        ? await getSearchedUsers(debouncedValue, page)
+        : await getUsers(page);
+
+      if (res.status === 200) {
+        const newUsers = res.data.users;
+
+        // Deduplicate users using _id to prevent React key collision
+        setUsers((prev) => {
+          const existingIds = new Set(prev.map((u) => u._id));
+          const filteredNew = newUsers.filter(
+            (u: UserWithDevices) => !existingIds.has(u._id)
+          );
+          return [...prev, ...filteredNew];
+        });
+
+        // If fewer users received than page size, we're at the end
+        if (newUsers.length < envClient.NEXT_PUBLIC_PAGE_SIZE) {
+          setHasMore(false);
+        } else {
+          setPage((prev) => prev + 1);
+        }
+      } else {
+        setHasMore(false);
+      }
+    } catch (err) {
+      console.error("Error fetching users", err);
+      setHasMore(false);
+    } finally {
+      setIsFetching(false);
+    }
+  }, [debouncedValue, page, hasMore, isFetching]);
+
+  // Initial fetch (on mount)
+  useEffect(() => {
+    if (page === 1 && users.length === 0 && !isFetching) {
+      fetchUsers();
+    }
+  }, [fetchUsers, page, users.length, isFetching]);
+
+  // Infinite scroll using IntersectionObserver
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isFetching) {
+          fetchUsers();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    const target = loadMoreRef.current;
+    if (target) observer.observe(target);
+
+    return () => {
+      if (target) observer.unobserve(target);
+    };
+  }, [fetchUsers, hasMore, isFetching]);
+
+  // Show loading UI while auth context is resolving
   if (loading) return <HomePageLoading />;
 
   return (
@@ -77,10 +140,27 @@ const Page = () => {
 
       {/* Users Grid */}
       <div className="flex min-h-full flex-wrap items-start justify-start gap-12 p-16">
-        {data.map((user) => (
+        {users.map((user) => (
           <UserBox key={String(user._id)} user={user} />
         ))}
       </div>
+
+      {/* Infinite Scroll Loader Trigger */}
+      {hasMore && (
+        <div
+          ref={loadMoreRef}
+          className="text-muted-foreground py-6 text-center text-sm"
+        >
+          Loading more users...
+        </div>
+      )}
+
+      {/* End Message */}
+      {!hasMore && users.length > 0 && (
+        <div className="text-muted-foreground py-6 text-center text-sm tracking-widest">
+          No User Left!
+        </div>
+      )}
     </>
   );
 };

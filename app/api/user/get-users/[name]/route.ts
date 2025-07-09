@@ -51,6 +51,20 @@ export async function POST(
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
+    // Parse request body
+    const { page, pageSize } = await req.json();
+    const pageNumber = Number(page);
+    let sizeOfPage = Number(pageSize);
+
+    // Validate page and pageSize
+    if (!pageNumber || pageNumber < 1 || !sizeOfPage || sizeOfPage < 1) {
+      return NextResponse.json({ message: "Invalid page" }, { status: 400 });
+    }
+
+    // Cap page size to prevent abuse
+    const MAX_PAGE_SIZE = 100;
+    sizeOfPage = Math.min(sizeOfPage, MAX_PAGE_SIZE);
+
     // If token is valid, find admin
     const admin = await Admin.findById(verify.id);
 
@@ -62,18 +76,36 @@ export async function POST(
     // Extract name from params
     const { name } = await params;
 
-    // Find users by name with fullName field for matching
+    // Find users by name with fullName field and apply pagination
     const rawUsers = await User.aggregate([
       {
         $addFields: {
           fullName: {
-            $concat: [
-              "$name.firstName",
-              " ",
-              { $ifNull: ["$name.middleName", ""] },
-              " ",
-              { $ifNull: ["$name.lastName", ""] },
-            ],
+            $trim: {
+              input: {
+                $reduce: {
+                  input: [
+                    "$name.firstName",
+                    "$name.middleName",
+                    "$name.lastName",
+                  ],
+                  initialValue: "",
+                  in: {
+                    $cond: [
+                      { $eq: ["$$this", null] },
+                      "$$value",
+                      {
+                        $cond: [
+                          { $eq: ["$$value", ""] },
+                          "$$this",
+                          { $concat: ["$$value", " ", "$$this"] },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -82,6 +114,12 @@ export async function POST(
           fullName: { $regex: name, $options: "i" },
           deleted: false,
         },
+      },
+      {
+        $skip: (pageNumber - 1) * sizeOfPage,
+      },
+      {
+        $limit: sizeOfPage,
       },
     ]);
 

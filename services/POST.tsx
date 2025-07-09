@@ -3,6 +3,9 @@
 // Axios
 import api from "@/lib/axios";
 
+// Client Environment Variables
+import { envClient } from "@/lib/env/env.client";
+
 // Types
 import {
   AddOrEditUserType,
@@ -31,13 +34,19 @@ export async function addUser(data: AddOrEditUserType) {
 }
 
 // Get Users
-export async function getUsers() {
-  return await api.post("/user/get-users");
+export async function getUsers(page: number) {
+  return await api.post("/user/get-users", {
+    page,
+    pageSize: envClient.NEXT_PUBLIC_PAGE_SIZE,
+  });
 }
 
 // Get Searched User
-export async function getSearchedUsers(userName: string) {
-  return await api.post(`/user/get-users/${userName}`);
+export async function getSearchedUsers(userName: string, page: number) {
+  return await api.post(`/user/get-users/${userName}`, {
+    page,
+    pageSize: envClient.NEXT_PUBLIC_PAGE_SIZE,
+  });
 }
 
 // Change User Name
