@@ -6,11 +6,13 @@
 import { useEffect, useState } from "react";
 
 // Utility
-import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
 
 // Store
 import { useUserStore } from "@/lib/store/useStore";
+
+// GET Services
+import { validateUser } from "@/services/GET";
 
 export function useAuth() {
   // Router
@@ -27,7 +29,7 @@ export function useAuth() {
     (async () => {
       try {
         // Make a request to check if the user is already logged in
-        const res = await api.get("/auth/validate");
+        const res = await validateUser();
 
         // If the user is logged in, set the name in the store
         if (res.status === 200) {

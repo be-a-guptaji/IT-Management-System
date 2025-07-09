@@ -14,3 +14,29 @@ export type UserStore = {
 };
 
 export type UserWithDevices = IUser & { devices: IDevice[] };
+
+export type AddOrEditUserType = {
+  name: {
+    firstName: string;
+    middleName?: string | undefined;
+    lastName?: string | undefined;
+  };
+  designation: string;
+  para: number;
+  devices?:
+    | {
+        deviceName: string;
+        macAddress: string;
+        ipAddress: string;
+        serialNumber: string;
+      }[]
+    | undefined;
+};
+
+export type LoginUserType = { userName: string; password: string };
+
+export type ChangePasswordType = {
+  oldPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+};

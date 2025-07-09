@@ -1,4 +1,4 @@
-// @/components/ui/AddUserPageLoading.tsx
+// @/components/loadings/AddUserPageLoading.tsx
 
 // Components
 import { Skeleton } from "@/components/ui/skeleton";

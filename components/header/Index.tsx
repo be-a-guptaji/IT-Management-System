@@ -13,10 +13,12 @@ import { LogOut } from "lucide-react";
 // Utility
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import api from "@/lib/axios";
 
 // Store
 import { useUserStore } from "@/lib/store/useStore";
+
+// POST Services
+import { logoutUser } from "@/services/POST";
 
 export const Header = () => {
   // Router
@@ -29,7 +31,7 @@ export const Header = () => {
   const logOut = async () => {
     try {
       // Make a request to log out
-      const res = await api.post("/auth/log-out");
+      const res = await logoutUser();
 
       //
       if (res.status === 200) {

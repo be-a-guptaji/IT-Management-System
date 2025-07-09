@@ -39,9 +39,11 @@ import { useForm } from "react-hook-form";
 // React
 import { useState } from "react";
 
-// Utility
-import api from "@/lib/axios";
+// Toast
 import { toast } from "sonner";
+
+// POST Services
+import { changePassword, changeUserName } from "@/services/POST";
 
 // Schema for changing username
 const changeUserNameFormSchema = z.object({
@@ -97,7 +99,7 @@ const Page = () => {
       setIsSubmitting(true);
 
       // Make a request to change username
-      const res = await api.post("/settings/change-userName", data);
+      const res = await changeUserName(data);
 
       // If the request is successful, show success message
       if (res.status === 200) {
@@ -129,7 +131,7 @@ const Page = () => {
       }
 
       // Make a request to change password
-      const res = await api.post("/settings/change-password", data);
+      const res = await changePassword(data);
 
       // If the request is successful, show success message
       if (res.status === 200) {

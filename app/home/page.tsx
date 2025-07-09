@@ -16,11 +16,11 @@ import { Search } from "lucide-react";
 // Hooks
 import { useAuth } from "@/hooks/useAuth";
 
-// API
-import api from "@/lib/axios";
-
 // Types
 import { UserWithDevices } from "@/lib/types";
+
+// POST Services
+import { getSearchedUsers, getUsers } from "@/services/POST";
 
 const Page = () => {
   // Hooks
@@ -46,9 +46,9 @@ const Page = () => {
         let res;
 
         if (debouncedValue) {
-          res = await api.post(`/user/get-users/${debouncedValue}`);
+          res = await getSearchedUsers(debouncedValue);
         } else {
-          res = await api.post("/user/get-users");
+          res = await getUsers();
         }
 
         if (res.status === 200) {

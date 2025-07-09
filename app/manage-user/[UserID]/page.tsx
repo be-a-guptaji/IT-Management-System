@@ -17,7 +17,6 @@ import { AddUserPageLoading } from "@/components/loadings/AddUserPageLoading";
 
 // Utility
 import { z } from "zod";
-import api from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 
@@ -32,6 +31,9 @@ import { useEffect, useState } from "react";
 
 // Types
 import { ManageUserPageProps } from "@/lib/types";
+
+// POST Services
+import { fetchUserByID, editUserByID } from "@/services/POST";
 
 // Zod schema for form validation
 const formSchema = z.object({
@@ -88,8 +90,10 @@ export default function Page({ params }: ManageUserPageProps) {
     const fetchUser = async () => {
       // Get user id from params
       const { userID } = await params;
+
       // Fetch user data
-      const res = await api.post(`/user/get-user-by-id/${userID}`);
+      const res = await fetchUserByID(userID);
+
       const data = res.data.user;
 
       form.setValue("name.firstName", data.name.firstName);
@@ -140,7 +144,7 @@ export default function Page({ params }: ManageUserPageProps) {
       const { userID } = await params;
 
       // Make api request to edit user
-      const res = await api.post(`/user/edit/${userID}`, data);
+      const res = await editUserByID(userID, data);
 
       // If the request is successful show success message
       if (res.status === 200) {

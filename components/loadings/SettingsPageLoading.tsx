@@ -1,4 +1,4 @@
-// @/components/ui/SettingsPageLoading.tsx
+// @/components/loadings/SettingsPageLoading.tsx
 
 // Components
 import { Skeleton } from "@/components/ui/skeleton";

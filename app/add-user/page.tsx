@@ -17,7 +17,6 @@ import { AddUserPageLoading } from "@/components/loadings/AddUserPageLoading";
 
 // Utility
 import { z } from "zod";
-import api from "@/lib/axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 
@@ -29,6 +28,9 @@ import { useAuth } from "@/hooks/useAuth";
 
 // React
 import { useState } from "react";
+
+// POST Services
+import { addUser } from "@/services/POST";
 
 // Define Zod schema for form validation
 const formSchema = z.object({
@@ -109,7 +111,7 @@ const Page = () => {
       }
 
       // Make a request to add the user
-      const res = await api.post("/user/register-user", data);
+      const res = await addUser(data);
 
       // If the request is successful, show success message
       if (res.status === 200) {

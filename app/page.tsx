@@ -26,7 +26,6 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import api from "@/lib/axios";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -38,6 +37,9 @@ import { Building2 } from "lucide-react";
 
 // Store
 import { useUserStore } from "@/lib/store/useStore";
+
+// POST Services
+import { loginUser, verifyUser } from "@/services/POST";
 
 // Login Form Schema
 const loginFormSchema = z.object({
@@ -75,7 +77,7 @@ export default function Page() {
       setError(false);
 
       // Reset the form after submission
-      const res = await api.post("/auth/login", data);
+      const res = await loginUser(data);
 
       if (res.status === 200) {
         router.push("/home");
@@ -98,7 +100,7 @@ export default function Page() {
     (async () => {
       try {
         // Make a request to check if the user is already logged in
-        const res = await api.post("/auth/verify");
+        const res = await verifyUser();
 
         // If the user is logged in, set the name in the store
         if (res.status === 200) {
