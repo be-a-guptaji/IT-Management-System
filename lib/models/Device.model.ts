@@ -1,11 +1,17 @@
-// @/lib/models/Device.Model.ts
+// @/lib/models/Device.model.ts
 
-// Mongoose
-import mongoose, { Schema, Document, model, Model } from "mongoose";
+import mongoose, {
+  Schema,
+  Document,
+  Model,
+  model,
+  Types,
+  HydratedDocument,
+} from "mongoose";
 
-// Define User document interface
+// Define Device document interface
 export interface IDevice extends Document {
-  user: Schema.Types.ObjectId;
+  user: Types.ObjectId;
   deviceName: string;
   macAddress: string;
   ipAddress: string;
@@ -48,10 +54,14 @@ const DeviceSchema: Schema<IDevice> = new Schema(
     toJSON: {
       virtuals: true,
       versionKey: false,
-      transform: (_, ret) => {
-        // @ts-expect-error - The below line is correct but ts is not able to recognise it
-        ret.id = ret._id.toString();
-        delete ret._id;
+      transform: (
+        doc: HydratedDocument<IDevice>,
+        ret: Record<string, unknown>
+      ) => {
+        if (ret._id && typeof ret._id === "object" && "toString" in ret._id) {
+          ret.id = (ret._id as Types.ObjectId).toString();
+          delete ret._id;
+        }
       },
     },
   }

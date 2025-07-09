@@ -1,7 +1,13 @@
-// @/lib/models/User.Model.ts
+// @/lib/models/User.model.ts
 
-// Mongoose
-import mongoose, { Schema, Document, Model, model } from "mongoose";
+import mongoose, {
+  Schema,
+  Document,
+  Model,
+  model,
+  Types,
+  HydratedDocument,
+} from "mongoose";
 
 // Define User document interface
 export interface IUser extends Document {
@@ -19,44 +25,27 @@ export interface IUser extends Document {
 const UserSchema: Schema<IUser> = new Schema(
   {
     name: {
-      firstName: {
-        type: String,
-        required: true,
-        trim: true,
-      },
-      middleName: {
-        type: String,
-        trim: true,
-      },
-      lastName: {
-        type: String,
-        trim: true,
-      },
+      firstName: { type: String, required: true, trim: true },
+      middleName: { type: String, trim: true },
+      lastName: { type: String, trim: true },
     },
-    designation: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    para: {
-      type: Number,
-      required: true,
-      min: 1,
-    },
-    deleted: {
-      type: Boolean,
-      default: false,
-    },
+    designation: { type: String, required: true, trim: true },
+    para: { type: Number, required: true, min: 1 },
+    deleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,
     toJSON: {
       virtuals: true,
       versionKey: false,
-      transform: (_, ret) => {
-        // @ts-expect-error - The below line is correct but ts is not able to recognise it
-        ret.id = ret._id.toString();
-        delete ret._id;
+      transform: (
+        doc: HydratedDocument<IUser>,
+        ret: Record<string, unknown>
+      ) => {
+        if (ret._id && typeof ret._id === "object" && "toString" in ret._id) {
+          ret.id = (ret._id as Types.ObjectId).toString();
+          delete ret._id;
+        }
       },
     },
   }
