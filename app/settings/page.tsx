@@ -146,7 +146,7 @@ const Page = () => {
     }
   };
 
-  if (!loading) return <SettingsPageLoading />;
+  if (loading) return <SettingsPageLoading />;
 
   return (
     <div className="flex min-h-full flex-col items-center justify-start gap-10 px-6 py-16">
