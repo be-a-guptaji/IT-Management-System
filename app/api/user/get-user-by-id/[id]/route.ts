@@ -9,7 +9,7 @@ import { connectToDatabase } from "@/lib/db";
 // Models
 import { Admin } from "@/lib/models/Admin.model";
 import { BanToken } from "@/lib/models/BanToken.model";
-import { User } from "../../../../../lib/models/User.model";
+import { User } from "@/lib/models/User.model";
 import { Device } from "@/lib/models/Device.model";
 
 // Environment
