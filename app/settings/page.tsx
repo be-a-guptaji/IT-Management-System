@@ -21,7 +21,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import Loading from "@/components/ui/loading";
+import { SettingsPageLoading } from "@/components/loadings/SettingsPageLoading";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -146,7 +146,7 @@ const Page = () => {
     }
   };
 
-  if (loading) return <Loading />;
+  if (!loading) return <SettingsPageLoading />;
 
   return (
     <div className="flex min-h-full flex-col items-center justify-start gap-10 px-6 py-16">

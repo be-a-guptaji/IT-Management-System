@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 // Components
 import { Input } from "@/components/ui/input";
 import UserBox from "@/components/ui/UserBox";
-import Loading from "@/components/ui/loading";
+import { HomePageLoading } from "@/components/loadings/HomePageLoading";
 
 // Icons
 import { Search } from "lucide-react";
@@ -60,7 +60,7 @@ const Page = () => {
     })();
   }, [debouncedValue]);
 
-  if (loading) return <Loading />;
+  if (loading) return <HomePageLoading />;
 
   return (
     <>

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Loading from "@/components/ui/loading";
+import { AddUserPageLoading } from "@/components/loadings/AddUserPageLoading";
 
 // Utility
 import { z } from "zod";
@@ -104,9 +104,7 @@ export default function Page({ params }: ManageUserPageProps) {
   }, [params, form]);
 
   // Loading screen until data is varified
-  if (loading) {
-    return <Loading />;
-  }
+  if (loading) return <AddUserPageLoading />;
 
   // Function to add device
   const handleAddDevice = () => {
