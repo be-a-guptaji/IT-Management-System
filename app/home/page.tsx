@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 // Components
 import { Input } from "@/components/ui/input";
 import UserBox from "@/components/ui/UserBox";
+import { Skeleton } from "@/components/ui/skeleton";
 import { HomePageLoading } from "@/components/loadings/HomePageLoading";
 
 // Icons
@@ -143,17 +144,24 @@ const Page = () => {
         {users.map((user) => (
           <UserBox key={String(user._id)} user={user} />
         ))}
-      </div>
 
-      {/* Infinite Scroll Loader Trigger */}
-      {hasMore && (
-        <div
-          ref={loadMoreRef}
-          className="text-muted-foreground py-6 text-center text-sm"
-        >
-          Loading more users...
-        </div>
-      )}
+        {/* Infinite Scroll Loader Trigger */}
+        {hasMore && (
+          <>
+            <Skeleton
+              ref={loadMoreRef}
+              className="h-60 w-56 cursor-pointer bg-white"
+            />
+
+            {Array.from({ length: 20 }).map((_, index) => (
+              <Skeleton
+                key={index}
+                className="h-60 w-56 cursor-pointer bg-white"
+              />
+            ))}
+          </>
+        )}
+      </div>
 
       {/* End Message */}
       {!hasMore && users.length > 0 && (
