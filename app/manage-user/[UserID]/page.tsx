@@ -19,6 +19,7 @@ import { AddUserPageLoading } from "@/components/loadings/AddUserPageLoading";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
+import { useRouter } from "next/navigation";
 
 // Sonner
 import { toast } from "sonner";
@@ -61,6 +62,9 @@ export default function Page({ params }: ManageUserPageProps) {
   // Hooks for auth
   const { loading } = useAuth();
 
+  // Router
+  const router = useRouter();
+
   // State
   const [submitting, setSubmitting] = useState(false); // State to track submitting
 
@@ -88,20 +92,26 @@ export default function Page({ params }: ManageUserPageProps) {
   // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
-      // Get user id from params
-      const { userID } = await params;
+      try {
+        // Get user id from params
+        const { userID } = await params;
 
-      // Fetch user data
-      const res = await fetchUserByID(userID);
+        // Fetch user data
+        const res = await fetchUserByID(userID);
 
-      const data = res.data.user;
+        const data = res.data.user;
 
-      form.setValue("name.firstName", data.name.firstName);
-      form.setValue("name.middleName", data.name?.middleName);
-      form.setValue("name.lastName", data.name?.lastName);
-      form.setValue("designation", data.designation);
-      form.setValue("para", data.para);
-      form.setValue("devices", data.devices);
+        form.setValue("name.firstName", data.name.firstName);
+        form.setValue("name.middleName", data.name?.middleName);
+        form.setValue("name.lastName", data.name?.lastName);
+        form.setValue("designation", data.designation);
+        form.setValue("para", data.para);
+        form.setValue("devices", data.devices);
+      } catch {
+        // If the request fails, show error message
+        toast.error("Failed to fetch user");
+        router.push("/manage-user");
+      }
     };
 
     fetchUser();
