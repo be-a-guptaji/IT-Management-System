@@ -115,7 +115,7 @@ export default function Page({ params }: ManageUserPageProps) {
     };
 
     fetchUser();
-  }, [params, form]);
+  }, [params, form, router]);
 
   // Loading screen until data is varified
   if (loading) return <AddUserPageLoading />;
