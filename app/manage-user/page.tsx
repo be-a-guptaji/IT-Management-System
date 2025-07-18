@@ -140,7 +140,7 @@ const Page = () => {
       </div>
 
       {/* Users Grid */}
-      <div className="flex min-h-full flex-wrap items-start justify-start gap-12 p-16">
+      <div className="flex min-h-full flex-wrap items-start justify-between gap-12 p-16">
         {users.map((user) => (
           <UserBox key={String(user._id)} user={user} />
         ))}
