@@ -403,4 +403,6 @@ MIT License © 2025 Aryan Baadlas
 
 ---
 
-Feel free to fork this repository, raise issues, or contribute with PRs.
+### ⭐ Show some love!
+
+If you like this project, **give it a star ⭐ on GitHub**!
