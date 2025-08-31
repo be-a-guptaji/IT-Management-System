@@ -329,7 +329,6 @@ Directory structure:
     └── services/
         ├── GET.tsx
         └── POST.tsx
-
 ```
 
 ### Key Folders:
