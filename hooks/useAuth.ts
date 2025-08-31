@@ -36,11 +36,11 @@ export function useAuth() {
           setName(res.data.admin);
         } else {
           // If the user is not logged in, redirect to login
-          router.push("/login");
+          router.push("/");
         }
       } catch {
         // If error, redirect to login
-        router.push("/login");
+        router.push("/");
       } finally {
         // Set Loading to false
         setLoading(false);

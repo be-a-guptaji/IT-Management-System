@@ -90,7 +90,6 @@ const Page = () => {
         setHasMore(false);
       }
     } catch (err) {
-      console.error("Error fetching users", err);
       setHasMore(false);
     } finally {
       setIsFetching(false);

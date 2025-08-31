@@ -33,14 +33,14 @@ export const Header = () => {
       // Make a request to log out
       const res = await logoutUser();
 
-      //
+      // Reset the name in the store if logged out successfully
       if (res.status === 200) {
         resetName();
       }
 
       // If logged out, redirect to login
       if (res.status === 200) {
-        router.push("/login");
+        router.push("/");
       }
     } catch {
       // Handle error silently
