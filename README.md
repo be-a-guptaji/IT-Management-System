@@ -85,18 +85,18 @@ graph TD
     %% CLIENT LAYER
     %% ==============================
     subgraph Client
-    U[User Browser] --> F[Next.js Frontend]
+    U[🖥️ User Browser] --> F[💻 Next.js Frontend]
     end
 
     %% ==============================
     %% BACKEND & API LAYER
     %% ==============================
     subgraph Backend
-    F --> API[Next.js API Routes]
-    API --> DB[(MongoDB via Mongoose)]
-    API --> Auth[JWT Authentication Service]
-    API --> RT[WebSocket - Real-Time Updates]
-    API --> Files[File Upload Service]
+    F --> API[⚙️ Next.js API Routes]
+    API --> DB[(🗄️ MongoDB via Mongoose)]
+    API --> Auth[🔐 JWT Authentication Service]
+    API --> RT[🔗 WebSocket - Real-Time Updates]
+    API --> Files[📂 File Upload Service]
     end
 
     %% ==============================
@@ -104,39 +104,39 @@ graph TD
     %% ==============================
     subgraph Authentication
     Auth --> DB
-    U -->|Login/Signup| Auth
-    Auth -->|Validate & Issue JWT| U
+    U -->|🔑 Login/Signup| Auth
+    Auth -->|✅ Validate & Issue JWT| U
     end
 
     %% ==============================
     %% DATABASE
     %% ==============================
     subgraph Database
-    DB[(MongoDB)]
-    DB --> Users[Users Collection]
-    DB --> Devices[Devices Collection]
-    DB --> Tickets[Support Tickets Collection]
-    DB --> Logs[Activity Logs Collection]
+    DB[(🗄️ MongoDB)]
+    DB --> Users[👤 Users Collection]
+    DB --> Devices[💻 Devices Collection]
+    DB --> Tickets[🎫 Support Tickets Collection]
+    DB --> Logs[📜 Activity Logs Collection]
     end
 
     %% ==============================
     %% SERVICES
     %% ==============================
     subgraph Services
-    API --> Notif[Notification Service]
-    API --> Billing[Billing/Payments Service]
-    API --> Reports[Reporting & Analytics Engine]
+    API --> Notif[🔔 Notification Service]
+    API --> Billing[💳 Billing/Payments Service]
+    API --> Reports[📊 Reporting & Analytics Engine]
     end
 
     %% ==============================
     %% FLOWS
     %% ==============================
-    U -->|View Dashboard| F
-    U -->|Request Device Data| API
-    API -->|Fetch & Return Data| Devices
-    U -->|Upload Document| Files
+    U -->|📊 View Dashboard| F
+    U -->|📡 Request Device Data| API
+    API -->|📂 Fetch & Return Data| Devices
+    U -->|📤 Upload Document| Files
     Files --> DB
-    API -->|Send Alert| Notif
+    API -->|🔔 Send Alert| Notif
     Billing --> API
     Reports --> API
 
@@ -150,6 +150,7 @@ graph TD
     classDef services fill:#82c7f9,stroke:#000,stroke-width:2px,color:#000;
     classDef user fill:#ffcc00,stroke:#000,stroke-width:2px,color:#000;
 
+    %% Apply classes
     class U user;
     class F client;
     class API,RT,Files backend;
