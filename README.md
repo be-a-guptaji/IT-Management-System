@@ -226,7 +226,9 @@ Visit: [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Directory Structure
 
-```mermaid
+The project is organized as follows:
+
+```
 Directory structure:
 └── it-management-system/
     ├── README.md
