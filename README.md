@@ -140,6 +140,23 @@ graph TD
     Billing --> API
     Reports --> API
 
+    %% ==============================
+    %% STYLING
+    %% ==============================
+    classDef client fill:#6ac6b7,stroke:#000,stroke-width:2px,color:#000;
+    classDef backend fill:#f1a4cb,stroke:#000,stroke-width:2px,color:#000;
+    classDef auth fill:#92f6c5,stroke:#000,stroke-width:2px,color:#000;
+    classDef db fill:#f1e1a4,stroke:#000,stroke-width:2px,color:#000;
+    classDef services fill:#82c7f9,stroke:#000,stroke-width:2px,color:#000;
+    classDef user fill:#ffcc00,stroke:#000,stroke-width:2px,color:#000;
+
+    class U user;
+    class F client;
+    class API,RT,Files backend;
+    class Auth auth;
+    class DB,Users,Devices,Tickets,Logs db;
+    class Notif,Billing,Reports services;
+
 ```
 
 ---
